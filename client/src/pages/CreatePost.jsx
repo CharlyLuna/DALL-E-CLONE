@@ -16,7 +16,7 @@ export const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (form.photo && form.prompt && form.name) {
+    if (form.photo && form.prompt && !loading) {
       setLoading(true)
       try {
         const response = await fetch(
@@ -37,7 +37,7 @@ export const CreatePost = () => {
         setLoading(false)
       }
     } else {
-      alert('Please fill al the fields and generate an image')
+      alert('Please fill all the fields and generate an image')
     }
   }
 
@@ -57,7 +57,7 @@ export const CreatePost = () => {
   }
 
   const generateImage = async () => {
-    if (form.prompt) {
+    if (form.prompt && !generatingImg) {
       try {
         setGeneratingImg(true)
         const response = await fetch(
