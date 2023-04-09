@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Loader, FormField, RenderCards } from '../components'
+import { useDebounce } from '../utils/useDebounce'
 
 export const Home = () => {
   const [loading, setLoading] = useState(false)
   const [allPosts, setAllPosts] = useState(null)
   const [searchText, setSearchText] = useState('')
+  const [searchResults, setSearchResults] = useState(null)
+  const debouncedSearch = useDebounce(searchText)
 
   useEffect(() => {
     const getPosts = async () => {
@@ -33,6 +36,16 @@ export const Home = () => {
     getPosts()
   }, [])
 
+  useEffect(() => {
+    if (searchText) {
+      const searchResults = allPosts.filter((item) => item.name.toLowerCase()
+        .includes(searchText.toLowerCase()) || item.prompt.toLowerCase()
+        .includes(searchText.toLowerCase()))
+      console.log(searchText)
+      setSearchResults(searchResults)
+    }
+  }, [debouncedSearch])
+
   return (
     <section className='max-w-7xl mx-auto'>
       <div>
@@ -45,7 +58,14 @@ export const Home = () => {
       </div>
 
       <div className='mt-16'>
-        <FormField />
+        <FormField
+          labelName='Search posts'
+          type='text'
+          name='text'
+          placeholder='Search posts'
+          value={searchText}
+          handleChange={({ target }) => setSearchText(target.value)}
+        />
       </div>
 
       <div className='mt-10'>
@@ -67,7 +87,7 @@ export const Home = () => {
               >
                 {searchText
                   ? (
-                    <RenderCards data={[]} title='No search results found' />
+                    <RenderCards data={searchResults} title='No search results found' />
                     )
                   : (
                     <RenderCards data={allPosts} title='No posts found' />
