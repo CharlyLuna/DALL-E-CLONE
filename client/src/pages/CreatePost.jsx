@@ -37,7 +37,7 @@ export const CreatePost = () => {
         setLoading(false)
       }
     } else {
-      alert('Please fill all the fields and generate an image')
+      window.alert('Please fill all the fields and generate an image')
     }
   }
 
@@ -79,7 +79,7 @@ export const CreatePost = () => {
         setGeneratingImg(false)
       }
     } else {
-      alert('Enter a prompt')
+      window.alert('Enter a prompt')
     }
   }
 
